@@ -1,19 +1,17 @@
 import { NextResponse } from "next/server";
-import { runAgent } from "../../services/openai";
+import { coordinator } from "../../lib/agents/coordinator";
 
 export async function POST(req: Request) {
-  const body = await req.json();
+  const { input } = await req.json();
 
-  const userInput = body.input;
-
-  if (!userInput) {
+  if (!input) {
     return NextResponse.json(
-      { error: "input is required" },
+      { error: "Transcript is required" },
       { status: 400 }
     );
   }
 
-  const result = await runAgent(userInput);
+  const result = await coordinator(input);
 
   return NextResponse.json({ result });
 }

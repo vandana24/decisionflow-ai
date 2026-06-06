@@ -2,6 +2,7 @@
 import { useState } from "react";
 import { useRouter } from "next/navigation";
 import AnalysisResult from "./types/analysis";
+import Toast from "./components/Toast";
 
 export default function Home() {
   const [transcript, setTranscript] = useState("");
@@ -30,7 +31,6 @@ export default function Home() {
     })
     .then((res) => res.json())
     .then((data) => {
-      console.log(data.result);
       setSummary(data.result);
       localStorage.setItem("analysis", JSON.stringify(data.result));
       data.result?.actions.length && router.push("/results");
@@ -49,17 +49,11 @@ export default function Home() {
       <p className="mb-8 text-slate-400">
         Transform meetings into decisions, actions, and accountability.
       </p>
-      {toast && (
-        <div className="fixed top-4 right-4 bg-red-500 text-white px-4 py-2 rounded-lg shadow-lg">
-          {toast}
-          <button
-            className="ml-3 font-bold"
-            onClick={() => setToast(null)}
-          >
-            ✕
-          </button>
-        </div>
-      )}
+      <Toast
+        message={toast}
+        type="error"
+        onClose={() => setToast(null)}
+      />
       <textarea
         className="w-full h-64 border rounded-lg p-4 mt-8"
         placeholder="Paste meeting transcript here..."

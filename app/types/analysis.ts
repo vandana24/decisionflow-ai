@@ -5,5 +5,8 @@ export default interface AnalysisResult {
   risks: string[];
   dependencies: string[];
   recommendations: string[];
-  email: string;
+  email: {
+    subject: string;
+    body: string;
+  };
 }
