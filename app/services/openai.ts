@@ -1,5 +1,6 @@
 import { DefaultAzureCredential } from "@azure/identity";
 import { AIProjectClient } from "@azure/ai-projects";
+import AnalysisResult from "../types/analysis";
 
 // ✅ Safe env validation
 function getEnv(name: string): string {
@@ -12,7 +13,7 @@ function getEnv(name: string): string {
 
 const endpoint: string = getEnv("AZURE_OPENAI_ENDPOINT");
 const agentName: string = getEnv("AZURE_OPENAI_DEPLOYMENT");
-const agentVersion: string = "1";
+const agentVersion: string = getEnv("AZURE_OPENAI_VERSION");;
 
 // Create AI Project client
 const projectClient = new AIProjectClient(
@@ -20,7 +21,7 @@ const projectClient = new AIProjectClient(
   new DefaultAzureCredential()
 );
 
-export async function runAgent(userInput: string): Promise<string> {
+export async function runAgent(userInput: string): Promise<AnalysisResult> {
   const openAIClient = projectClient.getOpenAIClient();
 
   // 1. Create conversation with user input
@@ -49,6 +50,6 @@ export async function runAgent(userInput: string): Promise<string> {
       },
     }
   );
-
-  return response.output_text ?? "No response from agent";
+  const data: AnalysisResult = JSON.parse(response.output_text);
+  return data;
 }

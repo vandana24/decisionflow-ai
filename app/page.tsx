@@ -1,9 +1,11 @@
 "use client";
 import { useState } from "react";
 import { useRouter } from "next/navigation";
+import AnalysisResult from "./types/analysis";
 
 export default function Home() {
   const [transcript, setTranscript] = useState("");
+  const [summary, setSummary] = useState<AnalysisResult | {}>({});
   const [toast, setToast] = useState<string | null>(null);
   const router = useRouter();
 
@@ -29,7 +31,9 @@ export default function Home() {
     .then((res) => res.json())
     .then((data) => {
       console.log(data.result);
-      router.push("/results");
+      setSummary(data.result);
+      localStorage.setItem("analysis", JSON.stringify(data.result));
+      data.result?.actions.length && router.push("/results");
     })
     .catch((err) => {
       console.error(err);
