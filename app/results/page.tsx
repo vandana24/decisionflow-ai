@@ -1,5 +1,6 @@
 "use client";
 import { useEffect, useState } from "react";
+import Link from "next/link";
 import AnalysisResult from "../types/analysis";
 import Toast from "../components/Toast";
 
@@ -100,12 +101,49 @@ export default function ResultsPage() {
                 type="success"
                 onClose={() => setToast(null)}
               />
-              <button
+              {/* <button
                 className="mt-4 px-4 py-2 border border-slate-600 rounded-lg bg-transparent text-white transition-all duration-300 cursor-pointer hover:bg-white hover:text-slate-950 hover:border-white"
                 onClick={handleCopyEmail}
               >
                 Copy Email
-              </button>
+              </button> */}
+              <div className="flex gap-3">
+                <Link
+                  href="/trace"
+                  className="
+                    rounded-lg
+                    border
+                    border-slate-600
+                    px-4
+                    py-2
+                    text-white
+                    transition-all
+                    duration-300
+                    hover:bg-white
+                    hover:text-slate-950
+                  "
+                >
+                  View Trace
+                </Link>
+
+                <button
+                  className="
+                    rounded-lg
+                    border
+                    border-slate-600
+                    px-4
+                    py-2
+                    text-white
+                    transition-all
+                    duration-300
+                    hover:bg-white
+                    hover:text-slate-950
+                  "
+                  onClick={handleCopyEmail}
+                >
+                  Copy Email
+                </button>
+              </div>
             </div>
 
             <pre className="whitespace-pre-wrap rounded-xl border border-slate-700 bg-slate-800 p-4 text-sm text-slate-200">

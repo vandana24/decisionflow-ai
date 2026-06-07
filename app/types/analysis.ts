@@ -1,3 +1,4 @@
+import { AgentTrace } from "./trace";
 export default interface AnalysisResult {
   summary: string;
   decisions: string[];
@@ -9,4 +10,5 @@ export default interface AnalysisResult {
     subject: string;
     body: string;
   };
+  trace: AgentTrace[];
 }

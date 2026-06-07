@@ -33,6 +33,7 @@ export default function Home() {
     .then((data) => {
       setSummary(data.result);
       localStorage.setItem("analysis", JSON.stringify(data.result));
+      localStorage.setItem("trace", JSON.stringify(data.result.trace));
       data.result?.actions.length && router.push("/results");
     })
     .catch((err) => {
