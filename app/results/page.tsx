@@ -72,13 +72,48 @@ export default function ResultsPage() {
 
           {/* Risks */}
           <section className="rounded-2xl border border-slate-700 bg-slate-900 p-6 shadow-sm">
-            <h2 className="mb-3 text-xl font-semibold">Risks</h2>
+            <h2 className="mb-4 text-xl font-semibold">
+              Risks
+            </h2>
 
-            <ul className="space-y-2">
-              {analysis?.risks.map((item, index) => (
-                <li key={index}>⚠️ {item}</li>
+            <div className="space-y-4">
+              {analysis?.risks?.map((risk, index) => (
+                <div
+                  key={index}
+                  className="rounded-xl border border-amber-500/20 bg-slate-950 p-4"
+                >
+                  <div className="flex items-start gap-2">
+                    <span className="text-lg">⚠️</span>
+
+                    <div className="flex-1">
+                      <p className="font-medium text-amber-300">
+                        {risk.risk}
+                      </p>
+
+                      <div className="mt-3 space-y-2 text-sm">
+                        <div>
+                          <span className="text-slate-500">
+                            Source:
+                          </span>{" "}
+                          <span className="text-sky-400">
+                            {risk.source}
+                          </span>
+                        </div>
+
+                        <div>
+                          <span className="text-slate-500">
+                            Reason:
+                          </span>{" "}
+                          <span className="text-slate-300">
+                            {risk.reason}
+                          </span>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
               ))}
-            </ul>
+            </div>
           </section>
 
           {/* Dependencies */}

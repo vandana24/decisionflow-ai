@@ -1,22 +1,20 @@
-import { openAIClient, MODEL} from "../foundry/client";
-import { emailPrompt } from "../prompts/email.prompt";
+import { runAgent } from "../foundry/runagent";
+import { getEnv } from "../utils";
+import { parseJsonResponse } from "./utils/parseJsonResponse";
 
-export async function emailAgent(input: {
-  summary: string;
-  decisions: string[];
-  actions: string[];
-  risks: string[];
-}): Promise<{ subject: string; body: string }> {
-  const res = await openAIClient.chat.completions.create({
-    model: MODEL,
-    messages: [
-      { role: "system", content: emailPrompt },
-      {
-        role: "user",
-        content: JSON.stringify(input),
-      },
-    ],
-  });
+const agentName = getEnv("EMAIL_AGENT_NAME");
+const agentVersion = getEnv("EMAIL_AGENT_VERSION");
 
-  return JSON.parse(res.choices[0].message.content || "[]");
+export async function emailAgent(
+  input: string
+) {
+  const response = await runAgent(
+    agentName,
+    agentVersion,
+    input
+  );
+  return parseJsonResponse<{
+    subject: string;
+    body: string;
+  }>(response);
 }

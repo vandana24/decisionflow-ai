@@ -1,14 +1,17 @@
-import { openAIClient, MODEL} from "../foundry/client";
-import { decisionPrompt } from "../prompts/decision.prompt";
+import { runAgent } from "../foundry/runagent";
+import { getEnv } from "../utils";
+import { parseJsonResponse } from "./utils/parseJsonResponse";
 
-export async function decisionAgent(input: string) {
-  const res = await openAIClient.chat.completions.create({
-    model: MODEL,
-    messages: [
-      { role: "system", content: decisionPrompt },
-      { role: "user", content: input },
-    ],
-  });
+const agentName = getEnv("DECISION_AGENT_NAME");
+const agentVersion = getEnv("DECISION_AGENT_VERSION");
 
-  return JSON.parse(res.choices[0].message.content || "[]");
+export async function decisionAgent(
+  input: string
+) {
+  const response = await runAgent(
+    agentName,
+    agentVersion,
+    input
+  );
+  return parseJsonResponse<string[]>(response);
 }

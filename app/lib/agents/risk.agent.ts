@@ -1,14 +1,18 @@
-import { openAIClient, MODEL} from "../foundry/client";
-import { riskPrompt } from "../prompts/risk.prompt";
+import { runAgent } from "../foundry/runagent";
+import { getEnv } from "../utils";
+import { parseJsonResponse } from "./utils/parseJsonResponse";
+import { Risk } from "../../types/risk";
 
-export async function riskAgent(input: string) {
-  const res = await openAIClient.chat.completions.create({
-    model: MODEL,
-    messages: [
-      { role: "system", content: riskPrompt },
-      { role: "user", content: input },
-    ],
-  });
+const agentName = getEnv("RISK_AGENT_NAME");
+const agentVersion = getEnv("RISK_AGENT_VERSION");
 
-  return JSON.parse(res.choices[0].message.content || "[]");
+export async function riskAgent(
+  input: string
+) {
+  const response = await runAgent(
+    agentName,
+    agentVersion,
+    input
+  );
+  return parseJsonResponse<Risk[]>(response);
 }

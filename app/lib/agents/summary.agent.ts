@@ -1,14 +1,15 @@
-import { openAIClient, MODEL} from "../foundry/client";
-import { summaryPrompt } from "../prompts/summary.prompt";
+import { runAgent } from "../foundry/runagent";
+import { getEnv } from "../utils";
 
-export async function summaryAgent(input: string) {
-  const res = await openAIClient.chat.completions.create({
-    model: MODEL,
-    messages: [
-      { role: "system", content: summaryPrompt },
-      { role: "user", content: input },
-    ],
-  });
+const agentName = getEnv("SUMMARY_AGENT_NAME");
+const agentVersion = getEnv("SUMMARY_AGENT_VERSION");
 
-  return res.choices[0].message.content ?? "";
+export async function summaryAgent(
+  input: string
+) {
+  return runAgent(
+    agentName,
+    agentVersion,
+    input
+  );
 }

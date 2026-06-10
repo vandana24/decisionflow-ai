@@ -1,14 +1,17 @@
-import { openAIClient, MODEL} from "../foundry/client";
-import { recommendationPrompt } from "../prompts/recommendation.prompt";
+import { runAgent } from "../foundry/runagent";
+import { getEnv } from "../utils";
+import { parseJsonResponse } from "./utils/parseJsonResponse";
 
-export async function recommendationAgent(input: string) {
-  const res = await openAIClient.chat.completions.create({
-    model: MODEL,
-    messages: [
-      { role: "system", content: recommendationPrompt },
-      { role: "user", content: input },
-    ],
-  });
+const agentName = getEnv("RECOMMENDATION_AGENT_NAME");
+const agentVersion = getEnv("RECOMMENDATION_AGENT_VERSION");
 
-  return JSON.parse(res.choices[0].message.content || "[]");
+export async function recommendationAgent(
+  input: string
+) {
+  const response = await runAgent(
+    agentName,
+    agentVersion,
+    input
+  );
+  return parseJsonResponse<string[]>(response);
 }

@@ -1,14 +1,43 @@
-import { openAIClient, MODEL} from "../foundry/client";
-import { actionPrompt } from "../prompts/action.prompt";
+import { runAgent } from "../foundry/runagent";
+import { getEnv } from "../utils";
+import { parseJsonResponse } from "./utils/parseJsonResponse";
 
-export async function actionAgent(input: string) {
-  const res = await openAIClient.chat.completions.create({
-    model: MODEL,
-    messages: [
-      { role: "system", content: actionPrompt },
-      { role: "user", content: input },
-    ],
-  });
+const agentName = getEnv("ACTION_AGENT_NAME");
+const agentVersion = getEnv("ACTION_AGENT_VERSION");
 
-  return JSON.parse(res.choices[0].message.content || "[]");
+export async function actionAgent(
+  input: string
+): Promise<string[]> {
+  try {
+    const response = await runAgent(
+      agentName,
+      agentVersion,
+      input
+    );
+
+    if (!response?.trim()) {
+      console.warn(
+        `[Action Agent] Empty response`
+      );
+      return [];
+    }
+
+    return parseJsonResponse<string[]>(response);
+  } catch (error: any) {
+    console.error(
+      `[Action Agent] Failed`,
+      error
+    );
+
+    if (
+      error?.message?.includes("not found") ||
+      error?.status === 404
+    ) {
+      console.error(
+        `[Action Agent] Agent '${agentName}' v${agentVersion} does not exist`
+      );
+    }
+
+    return [];
+  }
 }
