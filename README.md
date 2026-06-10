@@ -259,6 +259,8 @@ Attach:
 Purpose:
 Generate professional follow-up emails.
 
+<img width="1440" height="658" alt="Screenshot 2026-06-10 at 10 38 26 PM" src="https://github.com/user-attachments/assets/20324239-e292-4978-bd34-30c22cbb7cf5" />
+
 ---
 
 ## Step 4 - Publish Agent Versions
